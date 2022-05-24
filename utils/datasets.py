@@ -942,7 +942,7 @@ def load_image(self, index):
     if img is None:  # not cached
         path = self.img_files[index]
         if self.channels == 1:
-            im = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
+            img = cv2.imread(path,cv2.IMREAD_GRAYSCALE)
         else:
             img = cv2.imread(path)  # BGR
         assert img is not None, 'Image Not Found ' + path

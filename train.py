@@ -180,7 +180,7 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
     # Trainloader
     dataloader, dataset = create_dataloader(train_path, imgsz, batch_size, gs, opt,
                                             hyp=hyp, augment=True, cache=opt.cache_images, rect=opt.rect,
-                                            rank=rank, world_size=opt.world_size, workers=opt.workers)
+                                            rank=rank, world_size=opt.world_size, workers=opt.workers,channels=model.channels)
     mlc = np.concatenate(dataset.labels, 0)[:, 0].max()  # max label class
     nb = len(dataloader)  # number of batches
     assert mlc < nc, 'Label class %g exceeds nc=%g in %s. Possible class labels are 0-%g' % (mlc, nc, opt.data, nc - 1)
@@ -190,7 +190,7 @@ def train(hyp, opt, device, tb_writer=None, wandb=None):
         ema.updates = start_epoch * nb // accumulate  # set EMA updates
         testloader = create_dataloader(test_path, imgsz_test, batch_size*2, gs, opt,
                                        hyp=hyp, cache=opt.cache_images and not opt.notest, rect=True,
-                                       rank=-1, world_size=opt.world_size, workers=opt.workers)[0]  # testloader
+                                       rank=-1, world_size=opt.world_size, workers=opt.workers,channels=model.channels)[0]  # testloader
 
         if not opt.resume:
             labels = np.concatenate(dataset.labels, 0)
