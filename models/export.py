@@ -14,13 +14,14 @@ if __name__ == '__main__':
     print(opt)
 
     # Input
-    img = torch.zeros((opt.batch_size, 3, *opt.img_size))  # image size(1,3,320,192) iDetection
+    
 
     # Load PyTorch model
     attempt_download(opt.weights)
     model = torch.load(opt.weights, map_location=torch.device('cpu'))['model'].float()
     model.eval()
     model.model[-1].export = True  # set Detect() layer export=True
+    img = torch.zeros((opt.batch_size, model.channels, *opt.img_size))  # image size(1,3,320,192) iDetection
     y = model(img)  # dry run
 
     # TorchScript export
